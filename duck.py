@@ -1,0 +1,85 @@
+import pygame
+import program
+import random
+
+class Duck:
+    def __init__(self, leave_callback) -> None:
+        self.width = 0.05
+        self.height = 0.05
+        
+        # TODO: chande to image
+        self.surface = pygame.Surface(program.world_to_screen(self.width, self.height))
+        self.surface.fill((255, 255, 255))
+        
+        # generate pathes
+        self.generate_start_position()
+        self.generate_path()
+
+        # move properties
+        self.speed = 0.005
+        self.lastNodeIndex = 0
+        self.distance = 0
+
+        self.leave = leave_callback
+
+    def draw(self, surface) -> None:
+        surface.blit(self.surface, program.world_to_screen(self.current_position.x, self.current_position.y))
+
+    def move(self) -> None:
+        if self.lastNodeIndex < len(self.path) - 1:
+            start = self.path[self.lastNodeIndex]
+            end = self.path[self.lastNodeIndex + 1]
+
+            vec = end - start
+            
+            dir = vec.normalize()
+            length = vec.magnitude()
+
+            self.distance += self.speed
+            next_position = self.current_position + dir * self.speed
+
+            if self.distance >= length :
+                self.current_position = end
+                self.lastNodeIndex += 1
+                self.distance = 0
+            else:
+                self.current_position = next_position
+        else:
+            self.leave()
+
+
+    def generate_start_position(self) -> None:
+        x_offset = (program.WORLD_WIDTH * 0.2)
+
+        self.current_position = pygame.math.Vector2((
+            random.uniform(x_offset, program.WORLD_WIDTH - x_offset), 
+            program.WORLD_HEIGHT / 2 - self.height / 2
+        ))
+
+    def generate_path(self) -> None:
+        self.path = []
+
+        # Offsets
+        x_offset = (program.WORLD_WIDTH * 0.2)
+        y_bottom_offset = (program.WORLD_HEIGHT / 2 - program.WORLD_HEIGHT * 0.1)
+        y_top_offset = (program.WORLD_HEIGHT * 0.1)
+
+        # Add Start node
+        self.path.append(pygame.math.Vector2(
+            self.current_position.x,
+            self.current_position.y
+        ))
+
+        # Add path nodes
+        for node in range(4):
+            self.path.append(pygame.math.Vector2(
+                random.uniform(x_offset, program.WORLD_WIDTH - x_offset), 
+                random.uniform(y_top_offset, y_bottom_offset)
+        ))
+
+        # Add final node
+        self.path.append(pygame.math.Vector2(
+            random.uniform(x_offset, program.WORLD_WIDTH - x_offset),
+            0 - self.height
+        ))
+

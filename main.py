@@ -1,14 +1,19 @@
 import pygame
-from pygame._sdl2 import Window
 import sys
+
+import program
+
+from game import Game
 
 def main():
     # Init
     pygame.init()
-    pygame.display.set_mode((1080, 720), flags=pygame.RESIZABLE)
+    
+    # Create surface
+    surface = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 
-    # Maximize window
-    Window.from_display_module().maximize()
+    # Init Screen properties
+    program.init()
 
     # Set FPS
     clock = pygame.time.Clock()
@@ -16,18 +21,32 @@ def main():
 
     # Start render
     pygame.display.update()
+
+    # Create game object
+    game = Game()
     
+    # Main loop
     while 1:
         clock.tick(FPS)
-    
-        for i in pygame.event.get():
+
+        for event in pygame.event.get():
             # Handle quit
-            if i.type == pygame.QUIT:
+            if event.type == pygame.QUIT:
                 sys.exit()
+            # Handle Keyboard
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    sys.exit()
+
+        # Draw background
+        surface.fill((0, 0, 0))
+
+        # Update game
+        game.update(surface)
         
         # Update screen
         pygame.display.update()
-
+        
 
 if __name__ == '__main__':
     main()
