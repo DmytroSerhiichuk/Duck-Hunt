@@ -16,7 +16,7 @@ class Duck:
         self.generate_path()
 
         # move properties
-        self.speed = 0.005
+        self.speed = 0.003
         self.lastNodeIndex = 0
         self.distance = 0
 

@@ -44,11 +44,7 @@ def main():
                     game.pause = not game.pause
             # Check if the duck was hit
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not game.pause:
-                mouse_pos = pygame.mouse.get_pos()
-                if game.current_duck.is_mouse_over(mouse_pos):
-                    print("The mouse was clicked corretly")
-                else:
-                    print("You missed")
+                game.shoot()
 
         if not game.pause:
             # Draw background            
