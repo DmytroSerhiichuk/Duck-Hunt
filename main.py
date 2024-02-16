@@ -36,24 +36,30 @@ def main():
                 sys.exit()
             # Handle Keyboard
             elif event.type == pygame.KEYDOWN:
+                # Exit game
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
+                # Pause game
+                elif event.key == pygame.K_PAUSE or event.key == pygame.K_p:
+                    game.pause = not game.pause
             # Check if the duck was hit
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not game.pause:
                 mouse_pos = pygame.mouse.get_pos()
                 if game.current_duck.is_mouse_over(mouse_pos):
                     print("The mouse was clicked corretly")
                 else:
                     print("You missed")
 
-        # Draw background
-        surface.fill((0, 191, 255))
+        if not game.pause:
+            # Draw background            
+            surface.fill((0, 191, 255))
 
-        # Update game
-        game.update(surface)
-        
-        # Update screen
-        pygame.display.update()
+            # Update game
+            game.update(surface)
+            
+            # Update screen
+            pygame.display.update()
+
         
 
 if __name__ == '__main__':
