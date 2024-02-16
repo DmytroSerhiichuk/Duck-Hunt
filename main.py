@@ -47,7 +47,7 @@ def main():
                     print("You missed")
 
         # Draw background
-        surface.fill((0, 0, 0))
+        surface.fill((0, 191, 255))
 
         # Update game
         game.update(surface)
