@@ -22,6 +22,8 @@ class Duck:
 
         self.leave = leave_callback
 
+        self.rect = self.surface.get_rect(topleft=program.world_to_screen(self.current_position.x, self.current_position.y))
+
     def draw(self, surface) -> None:
         surface.blit(self.surface, program.world_to_screen(self.current_position.x, self.current_position.y))
 
@@ -82,4 +84,7 @@ class Duck:
             random.uniform(x_offset, program.WORLD_WIDTH - x_offset),
             0 - self.height
         ))
-
+    
+    def is_mouse_over(self, mouse_pos) -> bool:
+        duck_rect = pygame.Rect(program.world_to_screen(self.current_position.x, self.current_position.y), program.world_to_screen(self.width, self.height))
+        return duck_rect.collidepoint(mouse_pos)

@@ -4,6 +4,7 @@ import sys
 import program
 
 from game import Game
+from duck import Duck
 
 def main():
     # Init
@@ -37,6 +38,13 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
+            # Check if the duck was hit
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_pos = pygame.mouse.get_pos()
+                if game.current_duck.is_mouse_over(mouse_pos):
+                    print("The mouse was clicked corretly")
+                else:
+                    print("You missed")
 
         # Draw background
         surface.fill((0, 0, 0))
