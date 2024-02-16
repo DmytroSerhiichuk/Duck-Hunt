@@ -13,7 +13,7 @@ def main():
     # Create surface
     surface = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 
-    # Init Screen properties
+    # Init program properties
     program.init()
 
     # Set FPS
@@ -48,11 +48,14 @@ def main():
 
         if not game.pause:
             # Draw background            
-            surface.fill((0, 191, 255))
+            surface.fill(program.BLUE)
 
             # Update game
             game.update(surface)
-            
+
+            # Display game info
+            game.display_info(surface)
+
             # Update screen
             pygame.display.update()
 

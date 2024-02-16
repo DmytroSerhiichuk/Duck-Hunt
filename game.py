@@ -1,4 +1,5 @@
 import pygame
+import program
 from duck import Duck
 
 class Game:
@@ -75,3 +76,24 @@ class Game:
             self.handle_hit()
         else:
             self.handle_miss()
+
+
+    def display_info(self, surface) -> None:
+        # TODO: Create UI for game info
+        
+        infos = [
+            f'Level: {self.level}', 
+            f'Bullets: {self.bullets_count}', 
+            f'Remaining Ducks: {self.remaining_ducks}',
+            f'Misses: {self.missed_ducks}',
+            f'Score: {self.score}'
+        ]
+
+        x_offset = program.SCREEN_WIDTH * 0.05
+        y_main_offset = program.SCREEN_HEIGHT - len(infos) * program.MAIN_FONT_HEIGHT
+        y_secondary_offset = 0
+
+        for info in infos:
+            text = program.MAIN_FONT.render(info, True, program.WHITE)
+            surface.blit(text, (x_offset, y_main_offset + y_secondary_offset))
+            y_secondary_offset += program.MAIN_FONT_HEIGHT

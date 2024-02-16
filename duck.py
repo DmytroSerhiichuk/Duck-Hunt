@@ -9,7 +9,7 @@ class Duck:
         
         # TODO: chande to image
         self.surface = pygame.Surface(program.world_to_screen(self.width, self.height))
-        self.surface.fill((255, 255, 255))
+        self.surface.fill(program.WHITE)
         
         # generate pathes
         self.generate_start_position()
