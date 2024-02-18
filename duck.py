@@ -17,7 +17,7 @@ class Duck:
 
         # move properties
         self.speed = 0.003
-        self.lastNodeIndex = 0
+        self.last_node_index = 0
         self.distance = 0
 
         self.leave = leave_callback
@@ -28,9 +28,9 @@ class Duck:
         surface.blit(self.surface, program.world_to_screen(self.current_position.x, self.current_position.y))
 
     def move(self) -> None:
-        if self.lastNodeIndex < len(self.path) - 1:
-            start = self.path[self.lastNodeIndex]
-            end = self.path[self.lastNodeIndex + 1]
+        if self.last_node_index < len(self.path) - 1:
+            start = self.path[self.last_node_index]
+            end = self.path[self.last_node_index + 1]
 
             vec = end - start
             
@@ -42,7 +42,7 @@ class Duck:
 
             if self.distance >= length :
                 self.current_position = end
-                self.lastNodeIndex += 1
+                self.last_node_index += 1
                 self.distance = 0
             else:
                 self.current_position = next_position
@@ -88,3 +88,12 @@ class Duck:
     def is_mouse_over(self, mouse_pos) -> bool:
         duck_rect = pygame.Rect(program.world_to_screen(self.current_position.x, self.current_position.y), program.world_to_screen(self.width, self.height))
         return duck_rect.collidepoint(mouse_pos)
+
+    # Updates the duck's path after the user runs out of ammo.
+    def immediately_leave(self) -> None:
+        self.path = [
+            pygame.math.Vector2(self.current_position.x, self.current_position.y),
+            pygame.math.Vector2(self.current_position.x, 0 - self.height)
+        ] 
+        self.distance = 0
+        self.last_node_index = 0

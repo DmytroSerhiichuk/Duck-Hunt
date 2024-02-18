@@ -47,7 +47,7 @@ class Game:
 
         # Remove duck if bullets are over
         if self.bullets_count == 0:
-            self.handle_duck_leave()
+            self.current_duck.immediately_leave()
 
 
     def remove_duck(self) -> None:
@@ -71,11 +71,12 @@ class Game:
         
 
     def shoot(self) -> None:
-        mouse_pos = pygame.mouse.get_pos()
-        if self.current_duck.is_mouse_over(mouse_pos):
-            self.handle_hit()
-        else:
-            self.handle_miss()
+        if self.bullets_count > 0:
+            mouse_pos = pygame.mouse.get_pos()
+            if self.current_duck.is_mouse_over(mouse_pos):
+                self.handle_hit()
+            else:
+                self.handle_miss()
 
 
     def display_info(self, surface) -> None:
