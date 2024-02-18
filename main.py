@@ -4,9 +4,22 @@ import sys
 import program
 
 from game import Game
-from duck import Duck
 
 def main():
+    # Setting game difficult from arguments
+    difficult = 1 # default value -> 1 (normal)
+
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+        if arg == '1' or arg.lower() == 'easy':
+            difficult = 0.9
+        elif arg == '2' or arg.lower() == 'medium' or arg.lower() == 'normal':
+            difficult = 1
+        elif arg == '3' or arg.lower() == 'hard':
+            difficult = 1.1
+        else:
+            raise Exception('argument error') 
+
     # Init
     pygame.init()
     
@@ -24,7 +37,7 @@ def main():
     pygame.display.update()
 
     # Create game object
-    game = Game()
+    game = Game(difficult)
     
     # Main loop
     while 1:

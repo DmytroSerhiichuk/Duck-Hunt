@@ -3,8 +3,10 @@ import program
 from duck import Duck
 
 class Game:
-    def __init__(self) -> None:
-        self.current_duck = Duck(self.handle_duck_leaving, self.handle_duck_falling, 1)
+    def __init__(self, difficult) -> None:
+        self.difficult = difficult
+
+        self.current_duck = Duck(self.handle_duck_leaving, self.handle_duck_falling, 1, self.difficult)
         self.last_duck_removing_time = 0
         self.__TIME_TO_NEXT_DUCK = 2000
 
@@ -78,7 +80,7 @@ class Game:
         self.score += 1500
 
     def add_new_duck(self) -> None:
-        self.current_duck = Duck(self.handle_duck_leaving, self.handle_duck_falling, self.level)
+        self.current_duck = Duck(self.handle_duck_leaving, self.handle_duck_falling, self.level, self.difficult)
         
 
     def shoot(self) -> None:
