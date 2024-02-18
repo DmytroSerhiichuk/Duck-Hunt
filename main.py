@@ -43,7 +43,7 @@ def main():
                 elif event.key == pygame.K_PAUSE or event.key == pygame.K_p:
                     game.pause = not game.pause
             # Check if the duck was hit
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not game.pause and not game.is_game_over:
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 game.shoot()
 
         if not game.pause:

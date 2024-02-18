@@ -5,6 +5,8 @@ from duck import Duck
 class Game:
     def __init__(self) -> None:
         self.current_duck = Duck(self.handle_duck_leave)
+        self.last_duck_removing_time = 0
+        self.__TIME_TO_NEXT_DUCK = 2000
 
         self.pause = False
 
@@ -21,8 +23,13 @@ class Game:
         self.score = 0
 
     def update(self, surface) -> None:
-        self.current_duck.move()
-        self.current_duck.draw(surface)
+        if self.current_duck != None:
+            self.current_duck.move()
+        # Друга перевірка потрібна для уникнення помилки, після того, як качка вилетіла
+        if self.current_duck != None:
+            self.current_duck.draw(surface)
+        elif pygame.time.get_ticks() - self.last_duck_removing_time >= self.__TIME_TO_NEXT_DUCK:
+            self.add_new_duck()
 
 
     def handle_duck_leave(self) -> None:
@@ -34,13 +41,11 @@ class Game:
             return
         
         self.remove_duck()
-        self.add_new_duck()
 
     def handle_hit(self) -> None:
         self.score += 1000
 
         self.remove_duck()
-        self.add_new_duck()
 
     def handle_miss(self) -> None:
         self.bullets_count -= 1
@@ -52,7 +57,10 @@ class Game:
 
     def remove_duck(self) -> None:
         del self.current_duck
+        self.current_duck = None
         self.remaining_ducks -= 1
+
+        self.last_duck_removing_time = pygame.time.get_ticks()
 
         if self.remaining_ducks == 0:
             self.update_level()
@@ -71,7 +79,7 @@ class Game:
         
 
     def shoot(self) -> None:
-        if self.bullets_count > 0:
+        if self.bullets_count > 0 and not self.pause and not self.is_game_over and self.current_duck != None:
             mouse_pos = pygame.mouse.get_pos()
             if self.current_duck.is_mouse_over(mouse_pos):
                 self.handle_hit()
