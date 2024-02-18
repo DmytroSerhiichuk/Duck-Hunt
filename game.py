@@ -4,7 +4,7 @@ from duck import Duck
 
 class Game:
     def __init__(self) -> None:
-        self.current_duck = Duck(self.handle_duck_leave)
+        self.current_duck = Duck(self.handle_duck_leaving, self.handle_duck_falling)
         self.last_duck_removing_time = 0
         self.__TIME_TO_NEXT_DUCK = 2000
 
@@ -32,7 +32,7 @@ class Game:
             self.add_new_duck()
 
 
-    def handle_duck_leave(self) -> None:
+    def handle_duck_leaving(self) -> None:
         self.missed_ducks += 1
 
         # Check if user lost
@@ -42,17 +42,20 @@ class Game:
         
         self.remove_duck()
 
+    def handle_duck_falling(self) -> None:
+        self.remove_duck()
+
     def handle_hit(self) -> None:
         self.score += 1000
 
-        self.remove_duck()
+        self.current_duck.update_path_fall()
 
     def handle_miss(self) -> None:
         self.bullets_count -= 1
 
         # Remove duck if bullets are over
         if self.bullets_count == 0:
-            self.current_duck.immediately_leave()
+            self.current_duck.update_path_leave()
 
 
     def remove_duck(self) -> None:
@@ -75,11 +78,11 @@ class Game:
         self.score += 1500
 
     def add_new_duck(self) -> None:
-        self.current_duck = Duck(self.handle_duck_leave)
+        self.current_duck = Duck(self.handle_duck_leaving, self.handle_duck_falling)
         
 
     def shoot(self) -> None:
-        if self.bullets_count > 0 and not self.pause and not self.is_game_over and self.current_duck != None:
+        if self.bullets_count > 0 and not self.pause and not self.is_game_over and self.current_duck != None and not self.current_duck.is_falling:
             mouse_pos = pygame.mouse.get_pos()
             if self.current_duck.is_mouse_over(mouse_pos):
                 self.handle_hit()

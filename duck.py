@@ -3,7 +3,7 @@ import program
 import random
 
 class Duck:
-    def __init__(self, leave_callback) -> None:
+    def __init__(self, leaving_callback, falling_callback) -> None:
         self.width = 0.05
         self.height = 0.05
         
@@ -17,10 +17,15 @@ class Duck:
 
         # move properties
         self.speed = 0.003
+        self.__FALLING_SPEED = 0.005
         self.last_node_index = 0
         self.distance = 0
 
-        self.leave = leave_callback
+        self.is_falling = False
+
+        # callbacks
+        self.leave = leaving_callback
+        self.fall = falling_callback
 
         self.rect = self.surface.get_rect(topleft=program.world_to_screen(self.current_position.x, self.current_position.y))
 
@@ -37,8 +42,16 @@ class Duck:
             dir = vec.normalize()
             length = vec.magnitude()
 
-            self.distance += self.speed
-            next_position = self.current_position + dir * self.speed
+            speed = 0
+
+            if self.is_falling:
+                speed = self.__FALLING_SPEED
+            # TODO: Add level and difficult coefs
+            else:
+                speed = self.speed * 1 * 1
+
+            self.distance += speed
+            next_position = self.current_position + dir * speed
 
             if self.distance >= length :
                 self.current_position = end
@@ -46,6 +59,8 @@ class Duck:
                 self.distance = 0
             else:
                 self.current_position = next_position
+        elif self.is_falling:
+            self.fall()
         else:
             self.leave()
 
@@ -89,11 +104,21 @@ class Duck:
         duck_rect = pygame.Rect(program.world_to_screen(self.current_position.x, self.current_position.y), program.world_to_screen(self.width, self.height))
         return duck_rect.collidepoint(mouse_pos)
 
-    # Updates the duck's path after the user runs out of ammo.
-    def immediately_leave(self) -> None:
+    # Updates the duck's path
+    def update_path_leave(self) -> None:
         self.path = [
             pygame.math.Vector2(self.current_position.x, self.current_position.y),
             pygame.math.Vector2(self.current_position.x, 0 - self.height)
         ] 
         self.distance = 0
         self.last_node_index = 0
+
+    def update_path_fall(self) -> None:
+        self.path = [
+            pygame.math.Vector2(self.current_position.x, self.current_position.y),
+            pygame.math.Vector2(self.current_position.x, program.WORLD_HEIGHT / 2 - self.height / 2)
+        ] 
+        self.distance = 0
+        self.last_node_index = 0
+
+        self.is_falling = True
