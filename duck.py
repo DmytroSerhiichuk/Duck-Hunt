@@ -3,7 +3,7 @@ import program
 import random
 
 class Duck:
-    def __init__(self, leaving_callback, falling_callback) -> None:
+    def __init__(self, leaving_callback, falling_callback, level) -> None:
         self.width = 0.05
         self.height = 0.05
         
@@ -16,7 +16,8 @@ class Duck:
         self.generate_path()
 
         # move properties
-        self.speed = 0.003
+        self.speed = 0.001
+        self.__LEVEL_SPEED_COEFFICIENT = 0.002 * level
         self.__FALLING_SPEED = 0.005
         self.last_node_index = 0
         self.distance = 0
@@ -46,9 +47,9 @@ class Duck:
 
             if self.is_falling:
                 speed = self.__FALLING_SPEED
-            # TODO: Add level and difficult coefs
+            # TODO: Add difficult coeff
             else:
-                speed = self.speed * 1 * 1
+                speed = self.speed + self.__LEVEL_SPEED_COEFFICIENT * 1
 
             self.distance += speed
             next_position = self.current_position + dir * speed
