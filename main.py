@@ -1,6 +1,5 @@
 import pygame
 import sys
-
 import program
 
 from game import Game
@@ -36,41 +35,50 @@ def main():
     # Start render
     pygame.display.update()
 
+    # Screen mode
+    screen = 0
+
     # Create game object
     game = Game(difficult)
     
     # Main loop
     while 1:
         clock.tick(FPS)
-
-        for event in pygame.event.get():
-            # Handle quit
-            if event.type == pygame.QUIT:
-                sys.exit()
-            # Handle Keyboard
-            elif event.type == pygame.KEYDOWN:
-                # Exit game
-                if event.key == pygame.K_ESCAPE:
-                    sys.exit()
-                # Pause game
-                elif event.key == pygame.K_PAUSE or event.key == pygame.K_p:
-                    game.pause = not game.pause
-            # Check if the duck was hit
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                game.shoot()
-
-        if not game.pause:
-            # Draw background            
-            surface.fill(program.BLUE)
-
-            # Update game
-            game.update(surface)
-
-            # Display game info
-            game.display_info(surface)
-
-            # Update screen
+        if screen == 0:
+            surface.fill(program.BLACK)
+            game.display_menu(surface)
             pygame.display.update()
+        elif screen == 1:
+            for event in pygame.event.get():
+                # Handle quit
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                # Handle Keyboard
+                elif event.type == pygame.KEYDOWN:
+                    # Exit game
+                    if event.key == pygame.K_ESCAPE:
+                        sys.exit()
+                    # Pause game
+                    elif event.key == pygame.K_PAUSE or event.key == pygame.K_p:
+                        game.pause = not game.pause
+                # Check if the duck was hit
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    game.shoot()
+
+            if not game.pause:
+                # Draw background            
+                surface.fill(program.BLUE)
+
+                # Update game
+                game.update(surface)
+
+                # Display game info
+                game.display_info(surface)
+
+                # Update screen
+                pygame.display.update()
+        elif screen == 2:
+            print("Gameover")
 
         
 

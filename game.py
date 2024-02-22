@@ -111,3 +111,33 @@ class Game:
             text = program.MAIN_FONT.render(info, True, program.WHITE)
             surface.blit(text, (x_offset, y_main_offset + y_secondary_offset))
             y_secondary_offset += program.MAIN_FONT_HEIGHT
+    
+    def display_menu(self, surface):
+        infos = [
+            'Start',
+            'Options',
+            'Leaderboard',
+            'Exit'
+        ]
+
+        screen_center_x = program.SCREEN_WIDTH // 2
+        y = program.SCREEN_HEIGHT // 2
+
+        menu_rects = []
+
+        for info in infos:
+            text = program.MAIN_FONT.render(info, True, program.WHITE)
+            text_rect = text.get_rect(center=(screen_center_x, y))
+
+            pygame.draw.rect(surface, program.BLUE, text_rect)
+
+            surface.blit(text, text_rect)
+            menu_rects.append(text_rect)
+            y += program.MAIN_FONT_HEIGHT + 10
+        
+        mouse_pos = pygame.mouse.get_pos()
+        for rect in menu_rects:
+            if rect.collidepoint(mouse_pos):
+                print("DETECTED")
+            else:
+                print("NOT DETECTED")
