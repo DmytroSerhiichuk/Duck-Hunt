@@ -3,6 +3,7 @@ import sys
 import program
 
 from game import Game
+from button import Button
 
 def main():
     # Setting game difficult from arguments
@@ -18,6 +19,9 @@ def main():
             difficult = 1.1
         else:
             raise Exception('argument error') 
+        
+    game_background = pygame.image.load('Duck-Hunt/assets/game_background.jpg')
+    menu_background = pygame.image.load('Duck-Hunt/assets/main_menu_background.jpg')
 
     # Init
     pygame.init()
@@ -45,10 +49,38 @@ def main():
     while 1:
         clock.tick(FPS)
         if screen == 0:
-            surface.fill(program.BLACK)
-            game.display_menu(surface)
+            # Main menu background setup
+            surface.blit(menu_background, (0, 0))
+            # Track down mouse position
+            mouse_pos = pygame.mouse.get_pos()
+
+            # Finding screen center 
+            screen_center_x = program.SCREEN_WIDTH // 2
+            y = program.SCREEN_HEIGHT // 2
+
+            #Setting up buttons
+            start_button = Button(pos = (screen_center_x, y), text_input='Start', font = program.MAIN_FONT, 
+                                  base_color=program.WHITE, howering_color=program.WHITISH)
+            exit_button = Button(pos = (screen_center_x, y + program.MAIN_FONT_HEIGHT + 10),
+                                  text_input='Exit', font=program.MAIN_FONT, base_color=program.WHITE, howering_color=program.WHITISH)
+            
+            for button in [start_button, exit_button]:
+                button.changeColor(mouse_pos)
+                button.update(surface)
+
+            # Menu_Loop    
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if start_button.checkForInput(mouse_pos):
+                        screen = 1
+                    elif exit_button.checkForInput(mouse_pos):
+                        sys.exit()
             pygame.display.update()
+
         elif screen == 1:
+            #Game loop
             for event in pygame.event.get():
                 # Handle quit
                 if event.type == pygame.QUIT:
@@ -61,13 +93,13 @@ def main():
                     # Pause game
                     elif event.key == pygame.K_PAUSE or event.key == pygame.K_p:
                         game.pause = not game.pause
-                # Check if the duck was hit
+                # Check if the duck was hitb 
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     game.shoot()
 
             if not game.pause:
                 # Draw background            
-                surface.fill(program.BLUE)
+                surface.blit(game_background, (0, 0))
 
                 # Update game
                 game.update(surface)

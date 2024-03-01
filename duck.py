@@ -10,6 +10,9 @@ class Duck:
         # TODO: chande to image
         self.surface = pygame.Surface(program.world_to_screen(self.width, self.height))
         self.surface.fill(program.WHITE)
+
+        self.sprite_image = pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_1.png'), program.world_to_screen(self.width, self.height))
+
         
         # generate pathes
         self.generate_start_position()
@@ -29,11 +32,46 @@ class Duck:
         # callbacks
         self.leave = leaving_callback
         self.fall = falling_callback
+        
+        # Sprites for duck animation
+        self.sprites = []
+        self.sprites.append(pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_1.png'), program.world_to_screen(self.width, self.height)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_2.png'), program.world_to_screen(self.width, self.height)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_3.png'), program.world_to_screen(self.width, self.height)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_2.png'), program.world_to_screen(self.width, self.height)))
+        self.current_sprite = 0
+
+        # Sprites for duck frlying in diffrent direction
+        self.sprites_left = [pygame.transform.flip(sprite, True, False) for sprite in self.sprites]
+
+        #Sprites for duck falling
+        self.falling_sprite = pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Falling_sprite.png'), program.world_to_screen(self.width, self.height))
+        self.shoot_sprite = pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Shoot_sprite.png'), program.world_to_screen(self.width, self.height))
 
         self.rect = self.surface.get_rect(topleft=program.world_to_screen(self.current_position.x, self.current_position.y))
 
     def draw(self, surface) -> None:
-        surface.blit(self.surface, program.world_to_screen(self.current_position.x, self.current_position.y))
+        self.current_sprite += 0.2
+        if not self.is_falling: 
+            if self.current_sprite >= len(self.sprites):
+                self.current_sprite = 0
+            
+            if self.last_node_index < len(self.path) - 1:
+                start = self.path[self.last_node_index]
+                end = self.path[self.last_node_index + 1]
+                direction = "right" if end.x > start.x else "left"
+            elif self.is_falling:
+                direction = "left"  
+            else:
+                direction = "right"  
+
+            if direction == "right":
+                sprites = self.sprites
+            else:
+                sprites = self.sprites_left
+            surface.blit(sprites[int(self.current_sprite)], program.world_to_screen(self.current_position.x, self.current_position.y))
+        else:
+            surface.blit(self.falling_sprite, program.world_to_screen(self.current_position.x, self.current_position.y))
 
     def move(self) -> None:
         if self.last_node_index < len(self.path) - 1:
