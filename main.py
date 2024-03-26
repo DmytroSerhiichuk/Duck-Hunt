@@ -89,6 +89,7 @@ def main():
                         # Exit game
                         if event.key == pygame.K_ESCAPE:
                             program.BACKGROUND = 0
+                            game = Game(difficult)
                         # Pause game
                         elif event.key == pygame.K_PAUSE or event.key == pygame.K_p:
                             game.pause = not game.pause
