@@ -8,10 +8,10 @@ class Duck:
         self.height = 0.05
         
         # TODO: chande to image
-        self.surface = pygame.Surface(program.world_to_screen(self.width, self.height))
-        self.surface.fill(program.WHITE)
+        # self.surface = pygame.Surface(program.world_to_screen(self.width, self.height))
+        # self.surface.fill(program.WHITE)
 
-        self.sprite_image = pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_1.png'), program.world_to_screen(self.width, self.height))
+        self.sprite_image = pygame.transform.scale(pygame.image.load('./assets/Frame_1.png'), program.world_to_screen(self.width, self.height))
 
         
         # generate pathes
@@ -35,20 +35,20 @@ class Duck:
         
         # Sprites for duck animation
         self.sprites = []
-        self.sprites.append(pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_1.png'), program.world_to_screen(self.width, self.height)))
-        self.sprites.append(pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_2.png'), program.world_to_screen(self.width, self.height)))
-        self.sprites.append(pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_3.png'), program.world_to_screen(self.width, self.height)))
-        self.sprites.append(pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Frame_2.png'), program.world_to_screen(self.width, self.height)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load('./assets/Frame_1.png'), program.world_to_screen(self.width, self.height)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load('./assets/Frame_2.png'), program.world_to_screen(self.width, self.height)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load('./assets/Frame_3.png'), program.world_to_screen(self.width, self.height)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load('./assets/Frame_2.png'), program.world_to_screen(self.width, self.height)))
         self.current_sprite = 0
 
         # Sprites for duck frlying in diffrent direction
         self.sprites_left = [pygame.transform.flip(sprite, True, False) for sprite in self.sprites]
 
         #Sprites for duck falling
-        self.falling_sprite = pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Falling_sprite.png'), program.world_to_screen(self.width, self.height))
-        self.shoot_sprite = pygame.transform.scale(pygame.image.load('Duck-Hunt/assets/Shoot_sprite.png'), program.world_to_screen(self.width, self.height))
+        self.falling_sprite = pygame.transform.scale(pygame.image.load('./assets/Falling_sprite.png'), program.world_to_screen(self.width, self.height))
+        self.shoot_sprite = pygame.transform.scale(pygame.image.load('./assets/Shoot_sprite.png'), program.world_to_screen(self.width, self.height))
 
-        self.rect = self.surface.get_rect(topleft=program.world_to_screen(self.current_position.x, self.current_position.y))
+        # self.rect = self.surface.get_rect(topleft=program.world_to_screen(self.current_position.x, self.current_position.y))
 
     def draw(self, surface) -> None:
         self.current_sprite += 0.2
