@@ -6,6 +6,10 @@ from game import Game
 from button import Button
 
 def main():
+    """
+    Main function
+    """
+
     # Setting game difficult from arguments
     difficult = 1 # default value -> 1 (normal)
 

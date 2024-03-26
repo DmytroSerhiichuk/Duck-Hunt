@@ -24,7 +24,13 @@ class Game:
 
         self.score = 0
 
-    def update(self, surface) -> None:
+    def update(self, surface: pygame.Surface) -> None:
+        """
+        Update the position of the duck and displays it on the screen
+
+        Params:
+        - surface: game surface
+        """
         if self.current_duck != None:
             self.current_duck.move()
         # Друга перевірка потрібна для уникнення помилки, після того, як качка вилетіла
@@ -35,6 +41,9 @@ class Game:
 
 
     def handle_duck_leaving(self) -> None:
+        """
+        Handles the event when duck leaves
+        """
         self.missed_ducks += 1
 
         # Check if user lost
@@ -45,14 +54,23 @@ class Game:
         self.remove_duck()
 
     def handle_duck_falling(self) -> None:
+        """
+        Handles the event when the duck fell to the ground
+        """
         self.remove_duck()
 
     def handle_hit(self) -> None:
+        """
+        Handles the event when the user kills duck
+        """
         self.score += 1000
 
         self.current_duck.update_path_fall()
 
     def handle_miss(self) -> None:
+        """
+        Handles the event when the user misses
+        """
         self.bullets_count -= 1
 
         # Remove duck if bullets are over
@@ -61,6 +79,9 @@ class Game:
 
 
     def remove_duck(self) -> None:
+        """
+        Removes duck from the game and prepares the game for the next one
+        """
         del self.current_duck
         self.current_duck = None
         self.remaining_ducks -= 1
@@ -73,6 +94,9 @@ class Game:
         self.bullets_count = self.__MAX_BULLETS_COUNT
 
     def update_level(self) -> None:
+        """
+        Updates the level and associated variables
+        """
         self.level += 1
         self.remaining_ducks = 10
         self.missed_ducks = 0
@@ -80,10 +104,16 @@ class Game:
         self.score += 1500
 
     def add_new_duck(self) -> None:
+        """
+        Adds new duck to the game
+        """
         self.current_duck = Duck(self.handle_duck_leaving, self.handle_duck_falling, self.level, self.difficult)
         
 
     def shoot(self) -> None:
+        """
+        Handles the event when the user fires a shot
+        """
         if self.bullets_count > 0 and not self.pause and not self.is_game_over and self.current_duck != None and not self.current_duck.is_falling:
             mouse_pos = pygame.mouse.get_pos()
             if self.current_duck.is_mouse_over(mouse_pos):
@@ -92,7 +122,13 @@ class Game:
                 self.handle_miss()
 
 
-    def display_info(self, surface) -> None:
+    def display_info(self, surface: pygame.Surface) -> None:
+        """
+        Renders the game info to the screen
+
+        Params:
+        - surface: game surface
+        """
         # TODO: Create UI for game info
         
         infos = [

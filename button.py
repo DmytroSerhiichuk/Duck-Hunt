@@ -13,14 +13,35 @@ class Button():
         self.rect = self.text.get_rect(center = (self.x_pos, self.y_pos))
 
     def update(self, surface):
+        """
+        Renders the button on the screen
+
+        Params:
+        - surface: screen surface
+        """
         surface.blit(self.text, self.rect)
     
     def checkForInput(self, position):
+        """
+        Checks if the mouse is over the button 
+
+        Params:
+        - position: mouse position
+
+        Returns:
+        - bool: The value of whether the mouse is over the button
+        """
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range (self.rect.top, self.rect.bottom):
             return True
         return False
     
     def changeColor(self, position):
+        """
+        Sets the color of the button
+
+        Params:
+        - position: mouse position
+        """
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range (self.rect.top, self.rect.bottom):
             self.text = self.font.render(self.text_input, True, self.howering_color)
         else:

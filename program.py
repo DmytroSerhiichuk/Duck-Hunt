@@ -29,6 +29,10 @@ GAME_BACKGROUND = None
 MENU_BACKGROUND = None
 
 def init() -> None:
+    """
+    Initializes main constants and program variables
+    """
+
     global WORLD_WIDTH, WORLD_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_ASPECT_RATIO, SCREEN_TO_WORLD_RATIO
     global MAIN_FONT, MAIN_FONT_HEIGHT
     global GAME_BACKGROUND, MENU_BACKGROUND
@@ -54,6 +58,16 @@ def init() -> None:
         pygame.image.load('./assets/main_menu_background.jpg'), 
         (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-def world_to_screen(x, y):
+def world_to_screen(x: float, y: float) -> tuple[float, float]:
+    """
+    Convert coordinates from world (game) to screen
+
+    Params:
+    - x: x coordinate
+    - y: y coordinate
+
+    Returns:
+    - (float, float): converted coordinate point
+    """
     return (x * SCREEN_TO_WORLD_RATIO, y * SCREEN_TO_WORLD_RATIO)
 

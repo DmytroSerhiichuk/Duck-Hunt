@@ -50,7 +50,13 @@ class Duck:
 
         # self.rect = self.surface.get_rect(topleft=program.world_to_screen(self.current_position.x, self.current_position.y))
 
-    def draw(self, surface) -> None:
+    def draw(self, surface: pygame.Surface) -> None:
+        """
+        Renders the duck on the screen
+
+        Params:
+        - surface: game surface 
+        """
         self.current_sprite += 0.2
         if not self.is_falling: 
             if self.current_sprite >= len(self.sprites):
@@ -74,6 +80,9 @@ class Duck:
             surface.blit(self.falling_sprite, program.world_to_screen(self.current_position.x, self.current_position.y))
 
     def move(self) -> None:
+        """
+        Updates duck's position
+        """
         if self.last_node_index < len(self.path) - 1:
             start = self.path[self.last_node_index]
             end = self.path[self.last_node_index + 1]
@@ -106,6 +115,9 @@ class Duck:
 
 
     def generate_start_position(self) -> None:
+        """
+        Generates start position of the duck
+        """
         x_offset = (program.WORLD_WIDTH * 0.2)
 
         self.current_position = pygame.math.Vector2((
@@ -114,6 +126,9 @@ class Duck:
         ))
 
     def generate_path(self) -> None:
+        """
+        Generates all path of the duck
+        """
         self.path = []
 
         # Offsets
@@ -140,12 +155,24 @@ class Duck:
             0 - self.height
         ))
     
-    def is_mouse_over(self, mouse_pos) -> bool:
+    def is_mouse_over(self, mouse_pos: tuple[int, int]) -> bool:
+        """
+        Checks if the mouse is on the duck
+
+        Params:
+        - mouse_pos: Current position of the mouse
+
+        Returns:
+        - bool: The value of whether the cursor is on the duck
+        """
         duck_rect = pygame.Rect(program.world_to_screen(self.current_position.x, self.current_position.y), program.world_to_screen(self.width, self.height))
         return duck_rect.collidepoint(mouse_pos)
 
     # Updates the duck's path
     def update_path_leave(self) -> None:
+        """
+        Updates the duck's path to leave the screen immediately
+        """
         self.path = [
             pygame.math.Vector2(self.current_position.x, self.current_position.y),
             pygame.math.Vector2(self.current_position.x, 0 - self.height)
@@ -154,6 +181,9 @@ class Duck:
         self.last_node_index = 0
 
     def update_path_fall(self) -> None:
+        """
+        Updates the duck's path if it's hit
+        """
         self.path = [
             pygame.math.Vector2(self.current_position.x, self.current_position.y),
             pygame.math.Vector2(self.current_position.x, program.WORLD_HEIGHT / 2 - self.height / 2)
